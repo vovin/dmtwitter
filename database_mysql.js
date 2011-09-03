@@ -22,7 +22,7 @@ DatabaseMySQL.prototype.query = function (dbname, query, params) {
 
 DatabaseMySQL.prototype.queryAll = function (query, params) {
 	var that = this;
-	return this._dbs.map(function (dbname) {
+	return this._dbnames.map(function (dbname) {
 		var res = that.query(dbname, query, params);
 		res._dbname = dbname;
 		return res;
