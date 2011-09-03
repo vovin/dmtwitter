@@ -71,6 +71,27 @@ Engine.prototype.getFollowersIDs = function (user) {
 	});
 };
 
+Engine.prototype.addTweet = function (screen_name, text) {
+	var user = this.getUser(screen_name);
+
+	if (!user) return null;
+
+	var res = this._db.queryInsert(
+		user._dbname,
+		'INSERT INTO statuses (user_id, text, created_at) VALUES (?, "?", NOW())',
+		[ user.id, text ]
+	);
+
+	var tw = this._db.query(
+		user._dbname,
+		'SELECT id, UNIX_TIMESTAMP(created_at) AS created_at FROM statuses WHERE id = ?',
+		[ this._db.insertID(user._dbname) ]
+	)[0];
+	
+	tw.created_at = new Date(tw.created_at * 1000);
+	return tw;
+};
+
 var mr4 = function (res) {
 	var is = res.map(function () { return 0; }),
 		tws_sum = res.reduce(function (acc, curr) { return acc + curr.length }, 0),

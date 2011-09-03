@@ -12,12 +12,15 @@ var DatabaseMySQL = function (host, user, passwd, dbs) {
 };
 
 DatabaseMySQL.prototype.query = function (dbname, query, params) {
-	var i = 0;
-	query = query.replace(/\?/g, function () {
-		return params[i++];
-	});
+	query = genQuery(query, params);
 	//response.write(dbname + ': ' + query);
 	return this._dbs[dbname].query(query).fetchObjects();
+};
+
+DatabaseMySQL.prototype.queryInsert = function (dbname, query, params) {
+	query = genQuery(query, params);
+	//response.write(dbname + ': ' + query);
+	return this._dbs[dbname].query(query);
 };
 
 DatabaseMySQL.prototype.queryAll = function (query, params) {
@@ -44,5 +47,17 @@ DatabaseMySQL.prototype.queryUnless = function (query, params, check) {
 
 	return res;
 };
+
+DatabaseMySQL.prototype.insertID = function (dbname) {
+	return this._dbs[dbname].insertId();
+};
+
+var genQuery = function (query, params) {
+	var i = 0;
+	return query.replace(/\?/g, function () {
+		return params[i++];
+	});
+};
+
 
 exports.DatabaseMySQL = DatabaseMySQL;
