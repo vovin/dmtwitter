@@ -1,3 +1,13 @@
+var ServerResponse = require('http').ServerResponse;
+
+ServerResponse.prototype.json = function (obj) {
+	this.header({
+		'Content-Type': 'application/json'
+	});
+	this.write(JSON.stringify(obj));
+	return this;
+};
+
 var E = function () {
 };
 
