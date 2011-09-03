@@ -32,7 +32,13 @@ E.prototype.error404 = function (callback) {
 };
 
 var _route = function (path, method) {
-	return request.headers().PATH_INFO === path && request.method === method;
+        var headers = request.headers();
+	if ('PATH_INFO' in headers){
+		return headers.PATH_INFO === path && request.method === method;
+	} else {
+		path = '/server.sjs' + path;
+		return headers.REQUEST_URI === path && request.method === method;
+	}
 };
 
 exports.E = E;
