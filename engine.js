@@ -16,10 +16,12 @@ Engine.prototype.getUsersTweets = function (screen_name) {
 	if (!user) return null;
 
 	var res = this._db.query(
-		user.dbname, 
+		user._dbname, 
 		'SELECT * FROM statuses WHERE user_id = ? ORDER BY created_at LIMIT 20',
-		[ user.res.id ]
+		[ user.id ]
 	);
+
+	return res;
 };
 
 Engine.prototype.getUser = function (screen_name) {
@@ -30,8 +32,12 @@ Engine.prototype.getUser = function (screen_name) {
 			return res;
 		}
 	);
-
-	if (res) res.res = res.res[0];
+	
+	if (res) {
+		var dbname = res._dbname;
+		res = res[0];
+		res._dbname = dbname;
+	}
 	return res;
 };
 

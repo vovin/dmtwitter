@@ -16,14 +16,15 @@ DatabaseMySQL.prototype.query = function (dbname, query, params) {
 	query = query.replace(/\?/g, function () {
 		return params[i++];
 	});
-	//response.write(query);
 	return this._dbs[dbname].query(query).fetchObjects();
 };
 
 DatabaseMySQL.prototype.queryAll = function (query, params) {
 	var that = this;
 	return this._dbs.map(function (dbname) {
-		return { res: that.query(dbname, query, params), dbname: dbname };
+		var res = that.query(dbname, query, params);
+		res._dbname = dbname;
+		return res;
 	});
 };
 
@@ -38,9 +39,9 @@ DatabaseMySQL.prototype.queryUnless = function (query, params, check) {
 	while (!check(res) && i < this._dbs.length);
 	
 	if (res)
-		return { res: res, dbname: this._dbnames[i-1] };
-	else
-		return null;
+		res._dbname = this._dbnames[i - 1];
+
+	return res;
 };
 
 exports.DatabaseMySQL = DatabaseMySQL;
