@@ -1,8 +1,5 @@
 var DatabaseMySQL = require('./database_mysql.js').DatabaseMySQL;
 
-var USERS = 'users';
-var STATUSES = 'statuses';
-var FOLLOWERS = 'followers';
 var LIMIT = 20;
 
 
@@ -15,9 +12,11 @@ Engine.prototype.getUsersTweets = function (screen_name) {
 	
 	if (!user) return null;
 
+	//response.write('AAA' + JSON.stringify(user));
+
 	var res = this._db.query(
 		user._dbname, 
-		'SELECT * FROM statuses WHERE user_id = ? ORDER BY created_at LIMIT 20',
+		'SELECT * FROM statuses WHERE user_id = ? ORDER BY created_at LIMIT ' + LIMIT,
 		[ user.id ]
 	);
 
@@ -29,11 +28,11 @@ Engine.prototype.getUser = function (screen_name) {
 		'SELECT * FROM users WHERE screen_name = "?"',
 		[screen_name],
 		function (res) {
-			return res;
+			return res[0];
 		}
 	);
 	
-	if (res) {
+	if (res && res[0]) {
 		var dbname = res._dbname;
 		res = res[0];
 		res._dbname = dbname;

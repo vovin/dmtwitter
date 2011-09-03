@@ -16,6 +16,7 @@ DatabaseMySQL.prototype.query = function (dbname, query, params) {
 	query = query.replace(/\?/g, function () {
 		return params[i++];
 	});
+	//response.write(dbname + ': ' + query);
 	return this._dbs[dbname].query(query).fetchObjects();
 };
 
@@ -36,7 +37,7 @@ DatabaseMySQL.prototype.queryUnless = function (query, params, check) {
 		res = this.query(this._dbnames[i], query, params);
 		i++;
 	}
-	while (!check(res) && i < this._dbs.length);
+	while (!check(res) && i < this._dbnames.length);
 	
 	if (res)
 		res._dbname = this._dbnames[i - 1];
