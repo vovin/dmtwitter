@@ -26,4 +26,5 @@ e.get('/statuses/user_timeline.json', function (req, res) {
 
 e.error404(function (req, res) {
 	res.status(404, '404!');
+	res.write('not found!');
 });
