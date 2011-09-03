@@ -31,13 +31,31 @@ Engine.prototype.getHomeTimeline = function (screen_name) {
 	if (!followers_ids) return null;
 
 	res = this._db.queryAll(
-		'SELECT UNIX_TIMESTAMP(s.created_at) AS created_at, s.text, s.id, u.name, u.screen_name, u.id AS user_id from statuses s JOIN users u ON u.id = s.user_id WHERE u.id IN (?) ORDER BY s.created_at DESC LIMIT ' + LIMIT,
-		[followers_ids]
+		'SELECT UNIX_TIMESTAMP(s.created_at) AS created_at, s.text, s.id, s.user_id ' +
+		'FROM statuses s WHERE s.user_id IN (?) ORDER BY s.created_at DESC LIMIT ' + LIMIT,
+		[followers_ids]		
 	);
 
-	res = formatHomeTimeline(mr4(res));
+	var res2 = this._db.queryAll(
+		'SELECT * FROM users WHERE id IN (?)',
+		[followers_ids]
+	);
+	
+	var users = [],
+		r;
+	for (var i = 0, li = res2.length; i < li; ++i) {
+		r = res2[i];
+		for (var j = 0, lj = r.length; j < lj; ++j) {
+			users[+r[j].id] = r[j];
+		}
+	}
+
+
+
+	res = formatHomeTimeline(mr4(res), users);
 
 	//response.write(JSON.stringify(res));
+	//response.write(JSON.stringify(users));
 	return res;
 };
 
@@ -117,18 +135,20 @@ var mr4 = function (res) {
 	return r;
 };
 
-var formatHomeTimeline = function (res) {
-	var r;
+var formatHomeTimeline = function (res, users) {
+	var r, u;
+
 	for (var i = 0, l = res.length; i < l; ++i) {
 		r = res[i];
+		u = users[r.user_id];
 		res[i] = {
 			created_at: new Date(r.created_at * 1000),
 			text: r.text,
 			id: r.id,
 			user: {
-				name: r.name,
-				id: r.user_id,
-				screen_name: r.screen_name
+				name: u.name,
+				id: u.id,
+				screen_name: u.screen_name
 			}
 		};
 	};

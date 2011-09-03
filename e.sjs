@@ -1,6 +1,7 @@
 var ServerResponse = require('http').ServerResponse;
 
 ServerResponse.prototype.json = function (obj) {
+	this.status(200);
 	this.header({
 		'Content-Type': 'application/json'
 	});
