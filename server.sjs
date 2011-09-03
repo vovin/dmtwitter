@@ -11,7 +11,7 @@ var E = require('./e.sjs').E,
 
 e.get('/statuses/user_timeline.json', function (req, res) {
 	if (req.get.screen_name) {
-		var tweets = engine.getTweets(req.get.screen_name);
+		var tweets = engine.getUsersTweets(req.get.screen_name);
 		if (tweets) {
 			res.json(tweets);
 		}
