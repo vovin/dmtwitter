@@ -1,0 +1,27 @@
+#!/bin/sh
+ESP_SCRIPT='/opt/njs/bla.esp'   ## change me!
+V8C_SCRIPT="/usr/bin/spawn-fcgi -a 127.0.0.1 -p 9000 -u pawel -g pawel `which v8cgi` $ESP_SCRIPT"
+KIL_SCRIPT="killall -v -9 `which v8cgi`"
+RETVAL=0
+case "$1" in
+ start)
+       $V8C_SCRIPT
+       RETVAL=$?
+       ;;
+ stop)
+       $KIL_SCRIPT
+       RETVAL=$?
+       ;;
+ restart)
+       $KIL_SCRIPT
+       $V8C_SCRIPT
+       RETVAL=$?
+       ;;
+ *)
+       echo "Usage: v8fcgi {start|stop|restart}"
+       exit 1
+       ;;
+ esac
+ps aux | grep $ESP_SCRIPT | grep `which v8cgi`
+exit $RETVAL
+
