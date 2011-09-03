@@ -4,7 +4,7 @@ var E = require('./e.sjs').E,
 	e = new E(),
 	Engine = require('./engine.js').Engine,
 	engine = new Engine(
-		'10.1.1.148', 'devcamp', 'devcamp', [
+		'localhost', 'devcamp', 'devcamp', [
 		'twitter1', 'twitter2', 'twitter3', 'twitter4'
 	]);
 
