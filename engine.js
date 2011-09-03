@@ -36,8 +36,9 @@ Engine.prototype.getUser = function (screen_name) {
 		var dbname = res._dbname;
 		res = res[0];
 		res._dbname = dbname;
+		return res;
 	}
-	return res;
+	return null;
 };
 
 exports.Engine = Engine;
