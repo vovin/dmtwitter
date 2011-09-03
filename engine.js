@@ -10,7 +10,6 @@ var Engine = function (host, user, passwd, dbs) {
 Engine.prototype.getUserTimeline = function (screen_name) {
 	var user = this.getUser(screen_name);
 	if (!user) return null;
-
 	//response.write('AAA' + JSON.stringify(user));
 
 	var res = this._db.query(
@@ -43,17 +42,15 @@ Engine.prototype.getHomeTimeline = function (screen_name) {
 
 Engine.prototype.getUser = function (screen_name) {
 	var res = this._db.queryUnless(
-		'SELECT * FROM users WHERE screen_name = "?"',
-		[ screen_name ],
+		'select "twitter1" as "_dbname",id,name,screen_name,created_at from twitter1.users where screen_name="?" union all select "twitter2" as "_dbname",id,name,screen_name,created_at from twitter2.users where screen_name="?" union all select "twitter3" as "_dbname",id,name,screen_name,created_at from twitter3.users where screen_name="?" union all select "twitter4" as "_dbname",id,name,screen_name,created_at from twitter4.users where screen_name="?" LIMIT 1;',
+		[ screen_name, screen_name, screen_name, screen_name ],
 		function (res) {
 			return res[0];
 		}
 	);
 	
 	if (res && res[0]) {
-		var dbname = res._dbname;
 		res = res[0];
-		res._dbname = dbname;
 		return res;
 	}
 	return null;
