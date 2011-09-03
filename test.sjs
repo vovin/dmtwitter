@@ -1,12 +1,17 @@
 'use strict';
 
-var e = function (c) {
-	response.write(c);
-};
+var E = require('./e.sjs').E,
+	e = new E();
 
-var route = function (path, method) {
-	return request.headers().PATH_INFO === path && request.method === method;
-};
+
+e.get('/timeline.json', function (req, res) {
+	res.write('ok');
+});
+
+e.post('/timeline.json', function (req, res) {
+	res.write('ok');
+});
+
 
 /*
 var MySQL = require('mysql').MySQL;
@@ -19,8 +24,4 @@ response.write(r.fetchArrays().toString());
 response.header({ 'Content-Type': 'text/html' });
 e(JSON.stringify(request));
 /**/
-
-if (route('/timeline.json', 'GET')) {
-	response.write('ok');
-}
 
