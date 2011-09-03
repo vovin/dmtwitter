@@ -3,12 +3,20 @@ var E = function () {
 
 E.prototype.get = function (path, callback) {
 	if (_route(path, 'GET')) {
+		request._handled = true;
 		callback(request, response);
 	}
 };
 
 E.prototype.post = function (path, callback) {
 	if (_route(path, 'POST')) {
+		request._handled = true;
+		callback(request, response);
+	}
+};
+
+E.prototype.error404 = function (callback) {
+	if (!request._handled) {
 		callback(request, response);
 	}
 };

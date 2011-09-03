@@ -5,11 +5,11 @@ var E = require('./e.sjs').E,
 
 
 e.get('/timeline.json', function (req, res) {
-	res.write('ok');
+	res.write(JSON.stringify(req.get));
 });
 
 e.post('/timeline.json', function (req, res) {
-	res.write('ok');
+	res.write(JSON.stringify(req.post));
 });
 
 
