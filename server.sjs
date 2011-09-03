@@ -1,10 +1,12 @@
 'use strict';
 
 var E = require('./e.sjs').E,
-	e = new E('10.1.1.10', 'devcamp', 'devcamp', [
+	e = new E(),
+	Engine = require('./engine.js').Engine,
+	engine = new Engine(
+		'10.1.1.10', 'devcamp', 'devcamp', [
 		'twitter1', 'twitter2', 'twitter3', 'twitter4'
-	]),
-	engine = new (require('./engine.js').Engine)();
+	]);
 
 
 e.get('/statuses/user_timeline.json', function (req, res) {
