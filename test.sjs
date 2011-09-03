@@ -4,6 +4,10 @@ var e = function (c) {
 	response.write(c);
 };
 
+var route = function (path, method) {
+	return request.headers().PATH_INFO === path && request.method === method;
+};
+
 /*
 var MySQL = require('mysql').MySQL;
 var db = new MySQL().connect('10.1.1.10', 'devcamp', 'devcamp', 'twitter1');
@@ -16,7 +20,7 @@ response.header({ 'Content-Type': 'text/html' });
 e(JSON.stringify(request));
 /**/
 
-if (request.headers().PATH_INFO === '/timeline.json' && request.method === 'GET') {
+if (route('/timeline.json', 'GET')) {
 	response.write('ok');
 }
 
